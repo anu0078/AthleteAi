@@ -29,13 +29,17 @@ body { background:var(--dark); color:var(--offwhite); font-family:'Barlow', sans
   padding: 60px 40px 40px;
   position: relative;
   overflow: hidden;
+  background-image: url('{{ url_for("static", filename="athletes.png") }}');
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
 }
 .hero::before {
   content:'';
-  position:absolute; top:-200px; right:-200px;
-  width:600px; height:600px;
-  background: radial-gradient(circle, rgba(244,98,31,0.15) 0%, transparent 70%);
+  position:absolute; inset:0;
+  background: linear-gradient(to right, rgba(10,10,10,0.97) 40%, rgba(10,10,10,0.6) 70%, rgba(10,10,10,0.2) 100%);
   pointer-events:none;
+  z-index:0;
 }
 .hero::after {
   content:'';
@@ -43,6 +47,12 @@ body { background:var(--dark); color:var(--offwhite); font-family:'Barlow', sans
   width:400px; height:400px;
   background: radial-gradient(circle, rgba(244,98,31,0.08) 0%, transparent 70%);
   pointer-events:none;
+}
+.hero-quote {
+  font-family:'Barlow Condensed'; font-size:20px; font-weight:600;
+  color:var(--orange); letter-spacing:1px; margin-bottom:20px;
+  border-left:3px solid var(--orange); padding-left:14px;
+  font-style:italic; position:relative; z-index:1;
 }
 .nav {
   position:absolute; top:0; left:0; right:0;
@@ -67,8 +77,8 @@ body { background:var(--dark); color:var(--offwhite); font-family:'Barlow', sans
   padding:6px 16px; border-radius:4px; margin-bottom:24px;
 }
 .hero h1 {
-  font-family:'Bebas Neue'; font-size:clamp(60px,10vw,110px);
-  line-height:.95; color:var(--white); letter-spacing:2px; margin-bottom:8px;
+  font-family:'Bebas Neue'; font-size:clamp(80px,13vw,150px);
+  line-height:.92; color:var(--white); letter-spacing:2px; margin-bottom:8px;
 }
 .hero h1 span { color:var(--orange); }
 .hero-sub {
@@ -95,10 +105,7 @@ body { background:var(--dark); color:var(--offwhite); font-family:'Barlow', sans
 .cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(244,98,31,0.4); }
 .cta-btn .arrow { font-size:22px; }
 
-.hero-stats {
-  position:absolute; right:40px; top:50%; transform:translateY(-50%);
-  display:flex; flex-direction:column; gap:16px;
-}
+.hero-stats { display: none; }
 .stat-card {
   background:var(--card); border:1px solid var(--border); border-left:3px solid var(--orange);
   padding:16px 20px; border-radius:6px; min-width:160px;
@@ -110,6 +117,40 @@ body { background:var(--dark); color:var(--offwhite); font-family:'Barlow', sans
 .stat-label { font-size:11px; color:var(--muted); margin-top:4px; font-weight:500; letter-spacing:1px; }
 
 @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── HERO RIGHT PANEL ── */
+.hero-right-panel {
+  position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 14px;
+  width: 280px; z-index: 1;
+}
+.anim-stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px;
+  animation: fadeUp .6s ease both;
+}
+.anim-stat-card:nth-child(2) { animation-delay: .15s; }
+.anim-stat-card:nth-child(3) { animation-delay: .3s; }
+.anim-stat-card:nth-child(4) { animation-delay: .45s; }
+.anim-stat-card.highlight-card {
+  border-color: rgba(244,98,31,0.5);
+  background: linear-gradient(135deg, rgba(244,98,31,0.1), var(--card));
+}
+.anim-icon { font-size: 20px; margin-bottom: 6px; }
+.anim-num {
+  font-family: 'Bebas Neue'; font-size: 42px; color: var(--white);
+  line-height: 1; letter-spacing: 1px;
+}
+.anim-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 1px; margin-top: 4px; }
+.anim-sub { font-size: 11px; color: var(--orange); font-weight: 700; margin-top: 6px; letter-spacing: 1px; }
+.anim-bar {
+  height: 3px; background: var(--border); border-radius: 2px; margin-top: 12px; overflow: hidden;
+}
+.anim-bar-fill {
+  height: 100%; background: var(--orange); border-radius: 2px;
+  width: 0%; transition: width 1.5s cubic-bezier(.4,0,.2,1);
+}
+@media(max-width:768px) { .hero-right-panel { display: none; } }
 
 /* ── FORM SECTION ── */
 .form-section {
@@ -220,6 +261,7 @@ footer p { font-size:12px; color:var(--muted); }
   <div class="hero-content">
     <div class="hero-tag">FREE AI COACH FOR EVERY ATHLETE</div>
     <h1>YOUR <span>SPORT.</span><br>YOUR <span>COACH.</span><br>YOUR FUTURE.</h1>
+    <div class="hero-quote">"Every Indian athlete deserves a world-class coach."</div>
     <p class="hero-sub">
       <strong>No gym. No coach. No money needed.</strong><br>
       AthleteAI gives every local Indian athlete a personalised training and nutrition plan — powered by AI, completely free.
@@ -249,6 +291,34 @@ footer p { font-size:12px; color:var(--muted); }
     <div class="stat-card">
       <div class="stat-num">₹0</div>
       <div class="stat-label">Cost to you</div>
+    </div>
+  </div>
+
+  <!-- Right side: animated stats -->
+  <div class="hero-right-panel">
+    <div class="anim-stat-card">
+      <div class="anim-icon">🏅</div>
+      <div class="anim-num" id="stat1">0</div>
+      <div class="anim-label">Athletes in India</div>
+      <div class="anim-bar"><div class="anim-bar-fill" style="width:0%" data-width="95%"></div></div>
+    </div>
+    <div class="anim-stat-card">
+      <div class="anim-icon">😔</div>
+      <div class="anim-num" id="stat2">0%</div>
+      <div class="anim-label">Have no access to a coach</div>
+      <div class="anim-bar"><div class="anim-bar-fill" style="width:0%" data-width="90%"></div></div>
+    </div>
+    <div class="anim-stat-card">
+      <div class="anim-icon">🏆</div>
+      <div class="anim-num" id="stat3">0</div>
+      <div class="anim-label">Olympic medals won by India</div>
+      <div class="anim-bar"><div class="anim-bar-fill" style="width:0%" data-width="40%"></div></div>
+    </div>
+    <div class="anim-stat-card highlight-card">
+      <div class="anim-icon">🚀</div>
+      <div class="anim-num" style="color:var(--orange)">₹0</div>
+      <div class="anim-label">Cost to every athlete</div>
+      <div class="anim-sub">Free. Forever. For every Indian.</div>
     </div>
   </div>
 </section>
@@ -545,6 +615,28 @@ document.getElementById('profileForm').addEventListener('submit', async function
     document.getElementById('submitText').textContent = 'GET MY FREE PLAN →';
     loading.style.display = 'none';
   }
+});
+
+// Animate counters on load
+function animateCounter(el, target, suffix, duration) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = (target >= 100 ? Math.round(start) : Math.round(start)) + suffix;
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCounter(document.getElementById('stat1'), 500, 'M+', 1800);
+    animateCounter(document.getElementById('stat2'), 90, '%', 1600);
+    animateCounter(document.getElementById('stat3'), 28, ' medals', 1400);
+    document.querySelectorAll('.anim-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 300);
 });
 
 document.querySelector('[href="#setup"]').addEventListener('click', function(e) {
